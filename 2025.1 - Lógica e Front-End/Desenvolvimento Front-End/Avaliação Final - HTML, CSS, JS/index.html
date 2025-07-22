@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Lista de Tarefas - AS</title>
+		<link rel="stylesheet" href="assets/styles/style.css" />
+	</head>
+	<body>
+		<div class="content">
+			<header>
+				<div class="container">
+					<h1>Lista de Tarefas</h1>
+					<div class="form">
+						<input type="text" name="tasks" id="digitTasks" placeholder="Adicionar nova tarefa" />
+						<select name="tasksPriority" id="tasks-priority">
+							<option value="select">Selecionar</option>
+							<option value="high">Alta</option>
+							<option value="medium">Média</option>
+							<option value="low">Baixa</option>
+						</select>
+						<button id="button">Adicionar</button>
+					</div>
+				</div>
+			</header>
+
+			<main>
+				<div class="container">
+					<div class="legend-mobile">
+						<div class="lines">
+							<div class="line"></div>
+							<div class="line"></div>
+							<div class="line"></div>
+						</div>
+						<span id="legend-text">Mostrar Legenda de Cores</span>
+					</div>
+					<div class="legend-priority">
+						<h2>Legenda das Prioridades</h2>
+						<ul>
+							<li>Alta</li>
+							<li>Média</li>
+							<li>Baixa</li>
+						</ul>
+					</div>
+					<div class="search-tasks">
+						<div class="search-bar">
+							<img src="assets/img/search.png" alt="Lupa de pesquisa" />
+							<input type="search" id="search-input" placeholder="Pesquisa de tarefas" />
+						</div>
+
+					</div>
+					<div class="search-message">
+						<!-- Mensagem mostrada ao pesquisar algo -->
+					</div>
+				
+					<div class="content-tasks">
+						<div class="tasks-pending">
+							<h2>Tarefas Pendentes</h2>
+						</div>
+					</div>
+						<div class="tasks-completed">
+							<h2>Tarefas Concluídas</h2>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+		
+		<footer></footer>
+
+		<script src="assets/js/script.js"></script>
+	</body>
+</html>

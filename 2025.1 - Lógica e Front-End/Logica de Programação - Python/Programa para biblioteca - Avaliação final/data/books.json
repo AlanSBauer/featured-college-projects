@@ -1,0 +1,30 @@
+{
+    "available": {
+        "Harry Potter e a Pedra Filosofal": {
+            "author": "J.K. Rowling",
+            "year": 1997
+        },
+        "Percy Jackson e o Ladrão de Raios": {
+            "author": "Rick Riordan",
+            "year": 2005
+        },
+        "O Senhor dos Anéis: A Sociedade do Anel": {
+            "author": "J.R.R. Tolkien",
+            "year": 1954
+        }
+    },
+    "borrowed": {
+        "As Crônicas de Nárnia": {
+            "Name": "Bruno Souza",
+            "CPF": "98765432111",
+            "author": "C.S. Lewis",
+            "year": 1950
+        },
+        "Jogos Vorazes": {
+            "Name": "Ana Silva",
+            "CPF": "12345678900",
+            "author": "Suzanne Collins",
+            "year": 2008
+        }
+    }
+}

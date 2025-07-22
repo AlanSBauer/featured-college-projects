@@ -1,0 +1,6 @@
+OPCAO_INVALIDA = "Opção inválida, tente novamente!"
+DIGITE_UM_NUMERO_VALIDO = "Digite um número de (1-6)."
+DIGITE_UM_NUMERO_VALIDO_1_5 = "Digite um número de (1-5)."
+DIGITE_UM_TEMPO_EM_SEGUNDOS = "Digite um tempo em segundos (número inteiro)."
+DIGITE_NUMEROS_INTEIROS = "Digite números inteiros: "
+ERRO_INESPERADO = "Erro inesperado"
