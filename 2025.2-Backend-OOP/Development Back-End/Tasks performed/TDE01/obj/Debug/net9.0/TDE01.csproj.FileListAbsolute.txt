@@ -1,0 +1,14 @@
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\bin\Debug\net9.0\TDE01.exe
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\bin\Debug\net9.0\TDE01.deps.json
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\bin\Debug\net9.0\TDE01.runtimeconfig.json
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\bin\Debug\net9.0\TDE01.dll
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\bin\Debug\net9.0\TDE01.pdb
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\TDE01.GeneratedMSBuildEditorConfig.editorconfig
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\TDE01.AssemblyInfoInputs.cache
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\TDE01.AssemblyInfo.cs
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\TDE01.csproj.CoreCompileInputs.cache
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\TDE01.dll
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\refint\TDE01.dll
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\TDE01.pdb
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\TDE01.genruntimeconfig.cache
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE01\obj\Debug\net9.0\ref\TDE01.dll

@@ -1,0 +1,14 @@
+d:\Programacao\Backend\interfaceTde\bin\Debug\net8.0\interfaceTde.exe
+D:\Programacao\Backend\interfaceTde\bin\Debug\net8.0\interfaceTde.deps.json
+D:\Programacao\Backend\interfaceTde\bin\Debug\net8.0\interfaceTde.runtimeconfig.json
+d:\Programacao\Backend\interfaceTde\bin\Debug\net8.0\interfaceTde.dll
+d:\Programacao\Backend\interfaceTde\bin\Debug\net8.0\interfaceTde.pdb
+d:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\interfaceTde.GeneratedMSBuildEditorConfig.editorconfig
+d:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\interfaceTde.AssemblyInfoInputs.cache
+d:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\interfaceTde.AssemblyInfo.cs
+d:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\interfaceTde.csproj.CoreCompileInputs.cache
+d:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\interfaceTde.dll
+d:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\refint\interfaceTde.dll
+d:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\interfaceTde.pdb
+D:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\interfaceTde.genruntimeconfig.cache
+D:\Programacao\Backend\interfaceTde\obj\Debug\net8.0\ref\interfaceTde.dll

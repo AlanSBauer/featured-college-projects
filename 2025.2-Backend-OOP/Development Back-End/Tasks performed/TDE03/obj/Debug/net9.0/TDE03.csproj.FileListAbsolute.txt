@@ -1,0 +1,15 @@
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\bin\Debug\net9.0\TDE03.exe
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\bin\Debug\net9.0\TDE03.deps.json
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\bin\Debug\net9.0\TDE03.runtimeconfig.json
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\bin\Debug\net9.0\TDE03.dll
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\bin\Debug\net9.0\TDE03.pdb
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\TDE03.GeneratedMSBuildEditorConfig.editorconfig
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\TDE03.AssemblyInfoInputs.cache
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\TDE03.AssemblyInfo.cs
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\TDE03.csproj.CoreCompileInputs.cache
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\TDE03.sourcelink.json
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\TDE03.dll
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\refint\TDE03.dll
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\TDE03.pdb
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\TDE03.genruntimeconfig.cache
+C:\Programacao\Faculdade\DesenvolvimentoBackend\TDE03\obj\Debug\net9.0\ref\TDE03.dll
