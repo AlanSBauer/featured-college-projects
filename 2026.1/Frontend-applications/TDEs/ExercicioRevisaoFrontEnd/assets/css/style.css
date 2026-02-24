@@ -1,0 +1,85 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+header {
+    background-color: #4a6cf7;
+    color: white;
+    text-align: center;
+    padding: 24px;
+}
+
+main {
+    max-width: 600px;
+    margin: 32px auto;
+    padding: 0 16px;
+}
+
+#formulario {
+    display: flex;
+    gap: 8px;
+}
+
+#inputTarefa {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#btnAdicionar {
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#btnAdicionar:hover {
+    background-color: #3a57d7;
+}
+
+#lista {
+    list-style: none;
+    margin-top: 16px;
+}
+
+#lista li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background:white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.concluido {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+@media (max-width: 480px) {
+    #formulario {
+        flex-direction: column;
+    }
+}
+
+footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 13px;
+    color: #888;
+}
