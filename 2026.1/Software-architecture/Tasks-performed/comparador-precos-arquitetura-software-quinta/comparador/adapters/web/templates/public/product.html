@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}{{ product.display_name }}{% endblock %}
+{% block content %}
+<nav class="breadcrumb"><a href="/public/" class="btn-primary">Voltar</a></nav>
+<h1>{{ product.display_name }}</h1>
+<h2>Lojas que vendem — menor preço primeiro</h2>
+
+{% if not listings %}
+<p class="empty">Nenhuma oferta disponível no momento.</p>
+{% else %}
+<div class="comparison-list">
+  {% for l in listings %}
+  <a class="comparison-row" href="{{ l.url }}" target="_blank" rel="noopener">
+    <div class="thumb-wrap">
+      {% if l.image_url %}
+        <img src="{{ l.image_url }}" alt="" loading="lazy">
+      {% else %}
+        <div class="no-photo">📦</div>
+      {% endif %}
+    </div>
+    <div class="info">
+      <span class="site-badge site-{{ l.site }}">{{ l.site }}</span>
+      <p class="title">{{ l.title }}</p>
+      {% if l.seller %}<p class="seller">vendedor: {{ l.seller }}</p>{% endif %}
+    </div>
+    <div class="price-col">
+      <span class="price">R$ {{ "%.2f"|format(l.current_price) }}</span>
+      {% if l.original_price and l.original_price > l.current_price %}
+        <s class="original">R$ {{ "%.2f"|format(l.original_price) }}</s>
+      {% endif %}
+      <span class="go">Ir à loja →</span>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+
+<h2 style="margin-top: 3rem;">Histórico de Menor Preço</h2>
+<div class="chart-wrap" style="height: 350px; margin-bottom: 2rem;"><canvas id="priceChart"></canvas></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
+<script>
+const series = {{ history_json | safe }};
+if (!series[0].data.length) {
+  document.querySelector('.chart-wrap').innerHTML =
+    '<p class="empty" style="padding: 2rem; text-align: center;">Sem histórico de preços ainda.</p>';
+} else {
+  let allData = series[0].data;
+  
+  // Se houver apenas 1 dia de coleta, o gráfico desenha apenas um ponto no meio.
+  // Para ficar bonito e formar uma linha, duplicamos o ponto para o dia anterior.
+  if (allData.length === 1) {
+    const pt = allData[0];
+    const prevDay = luxon.DateTime.fromISO(pt.x).minus({ days: 1 }).toISODate();
+    allData = [{ x: prevDay, y: pt.y }, pt];
+  }
+
+  const ctx = document.getElementById('priceChart');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Menor Preço',
+        data: allData,
+        borderColor: '#00a650', // zoom green
+        backgroundColor: 'rgba(0, 166, 80, 0.15)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 6, // Make point larger so it's visible
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#00a650',
+        pointBorderWidth: 2,
+        pointHoverRadius: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { 
+          type: 'time', 
+          time: { unit: 'day', tooltipFormat: 'dd/MM/yyyy' }
+        },
+        y: {
+          beginAtZero: false,
+          ticks: { callback: v => 'R$ ' + Number(v).toFixed(2) }
+        },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => 'R$ ' + ctx.parsed.y.toFixed(2)
+          }
+        }
+      },
+    }
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Admin — Produtos{% endblock %}
+{% block content %}
+<h1>Admin — Produtos rastreados</h1>
+<p class="meta">Visão pública em <a href="/public/">/public/</a></p>
+
+{% if not products %}
+<p class="empty">Nenhum produto ainda. Rode <code>python -m comparador track</code> primeiro.</p>
+{% else %}
+<table class="products">
+  <thead>
+    <tr>
+      <th>Produto</th>
+      <th class="num">Listings</th>
+      <th class="num">Menor preço</th>
+      <th>Loja</th>
+      <th>Atualizado</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in products %}
+    <tr>
+      <td><a href="/admin/product/{{ p.id }}">{{ p.display_name }}</a></td>
+      <td class="num">{{ p.listing_count }}</td>
+      <td class="num price">
+        {% if p.best_price %}R$ {{ "%.2f"|format(p.best_price) }}{% else %}—{% endif %}
+      </td>
+      <td>
+        {% if p.best_site %}
+          <span class="site-badge site-{{ p.best_site }}">{{ p.best_site }}</span>
+        {% else %}—{% endif %}
+      </td>
+      <td class="date">{{ p.last_updated[:16].replace('T', ' ') if p.last_updated else "—" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}
