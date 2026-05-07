@@ -3,14 +3,11 @@ package service;
 import adapter.DatabaseStorage;
 import adapter.PersistInterface;
 import domain.EntityInterface;
-
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class ProductService implements ServiceInterface {
-
     PersistInterface armazenamento = new DatabaseStorage();
-
 
     @Override
     public void create(EntityInterface entity) {
@@ -26,7 +23,7 @@ public class ProductService implements ServiceInterface {
     public void listAll() {
         ArrayList<EntityInterface> dados = armazenamento.listAll();
         for (int i = 0; i < dados.size(); i++) {
-            System.out.println(dados.get(i));
+            IO.println(dados.get(i));
         }
     }
 
@@ -35,7 +32,7 @@ public class ProductService implements ServiceInterface {
         return armazenamento.findOneById(id);
     }
 
-    public UUID generateUUID(){
+    public UUID generateUUID() {
         return UUID.randomUUID();
     }
 }
