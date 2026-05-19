@@ -1,5 +1,7 @@
 ### 4.1 Identificação
-Nome: Alan dos Santos Bauer
+Nomes: 
+Alan dos Santos Bauer
+Adrian dos Santos Garbelloto
 
 ### 4.2 Introdução
 Implementar estruturas de dados manualmente é importante porque ajuda a entender como a memória é organizada e manipulada durante a execução de um programa, além de permitir o controle direto das ligações entre os elementos por meio de referências (ponteiros). Isso torna mais claro o funcionamento de operações como inserção, remoção e navegação na estrutura, desenvolvendo o raciocínio lógico e a compreensão de como o computador gerencia os dados internamente, sem depender apenas de estruturas prontas da linguagem.
