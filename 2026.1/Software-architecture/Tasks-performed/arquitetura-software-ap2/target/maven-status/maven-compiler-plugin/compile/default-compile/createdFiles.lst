@@ -1,0 +1,13 @@
+domain\EntityInterface.class
+adapter\PersistInterface.class
+service\CrawlerService.class
+service\ServiceInterface.class
+MainDemo.class
+domain\Price.class
+Main.class
+domain\ProductLink.class
+service\ProductService.class
+utils\GenerateValue.class
+domain\Product.class
+adapter\DatabaseStorage.class
+adapter\PlaywrightScraper.class

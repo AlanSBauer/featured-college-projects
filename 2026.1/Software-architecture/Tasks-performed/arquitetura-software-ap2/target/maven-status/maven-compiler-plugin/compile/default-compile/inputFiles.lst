@@ -1,0 +1,13 @@
+D:\Git e GitHub\arquitetura-software-quinta\src\adapter\DatabaseStorage.java
+D:\Git e GitHub\arquitetura-software-quinta\src\adapter\PersistInterface.java
+D:\Git e GitHub\arquitetura-software-quinta\src\adapter\PlaywrightScraper.java
+D:\Git e GitHub\arquitetura-software-quinta\src\domain\EntityInterface.java
+D:\Git e GitHub\arquitetura-software-quinta\src\domain\Price.java
+D:\Git e GitHub\arquitetura-software-quinta\src\domain\Product.java
+D:\Git e GitHub\arquitetura-software-quinta\src\domain\ProductLink.java
+D:\Git e GitHub\arquitetura-software-quinta\src\Main.java
+D:\Git e GitHub\arquitetura-software-quinta\src\MainDemo.java
+D:\Git e GitHub\arquitetura-software-quinta\src\service\CrawlerService.java
+D:\Git e GitHub\arquitetura-software-quinta\src\service\ProductService.java
+D:\Git e GitHub\arquitetura-software-quinta\src\service\ServiceInterface.java
+D:\Git e GitHub\arquitetura-software-quinta\src\utils\GenerateValue.java
