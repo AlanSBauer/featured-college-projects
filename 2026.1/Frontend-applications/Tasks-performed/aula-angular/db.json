@@ -1,0 +1,17 @@
+{
+  "produtos": [
+    {
+      "id": "2",
+      "nome": "Notebook Positivo",
+      "descricao": "Notebook `Positivo Vision`, 8GB RAM, 256GB SSD",
+      "preco": 5500
+    },
+    {
+      "nome": "Outro produto",
+      "descricao": "outro descricao",
+      "preco": 1233234,
+      "id": "Acf2jTkiVwk"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

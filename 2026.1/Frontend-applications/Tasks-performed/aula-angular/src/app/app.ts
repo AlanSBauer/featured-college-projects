@@ -10,5 +10,5 @@ import { ProdutoList } from './components/produto-list/produto-list';
   styleUrl: './app.css'
 })
 export class App {
-  nome = "Alan";
+  nome = 'Lucas Fogaça'
 }

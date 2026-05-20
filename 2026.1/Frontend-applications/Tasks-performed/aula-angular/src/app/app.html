@@ -1,5 +1,5 @@
 <app-navbar/>
 <main class="page">
-    <app-produto-form/>
-    <app-produto-list/>
+    <app-produto-form (salvo)="lista.carregarProdutos()" />
+    <app-produto-list #lista/>
 </main>

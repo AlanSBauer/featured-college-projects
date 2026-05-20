@@ -1,26 +1,62 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { Produto } from '../../models/produto';
+import { ProdutoService } from '../../services/produto.service';
 
 @Component({
   selector: 'app-produto-list',
-  standalone: true,
   imports: [CurrencyPipe],
   templateUrl: './produto-list.html',
   styleUrl: './produto-list.css',
 })
 export class ProdutoList {
-  produtos = [
-    {
-      id: 1,
-      nome: 'Notebook Dell',
-      descricao: 'Notebook Dell Inspiron 15',
-      preco: 2500
-    },
-    {
-      id: 2,
-      nome: 'Mouse Logitech',
-      descricao: 'Mouse sem fio',
-      preco: 450
+  private readonly produtosService = inject(ProdutoService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  produtos : Produto[] = [];
+  carregando: boolean = false;
+ 
+  ngOnInit() {
+    this.carregarProdutos();
+  }
+
+  carregarProdutos() : void{
+    this.carregando = true;
+    this.produtosService.listar().subscribe({
+      next: (dados) => { 
+        this.produtos = dados;
+        this.carregando = false;
+        this.cdr.detectChanges();
+      },
+      error: (erro) => 
+        {
+          console.error('Erro ao carregar produtos:', erro)
+          this.carregando = false;
+          this.cdr.detectChanges();
+        }
+    })
+  }
+
+  editar(produto: Produto): void {
+    if(!produto.id){
+      return;
     }
-  ];
-}
+
+    this.produtosService.atualizar(produto , produto.id).subscribe({
+        next: () => this.carregarProdutos(),
+        error: (erro) => console.error('Erro ao atualizar', erro),
+      });
+    
+    }
+
+    excluir(produto: Produto): void{
+      if(!produto.id){
+        return;
+      }
+      this.produtosService.excluir(produto.id).subscribe({
+        next: () => this.carregarProdutos(),
+        error: (erro) => console.error('Erro ao excluir', erro),
+      })
+    }
+
+  }
+
