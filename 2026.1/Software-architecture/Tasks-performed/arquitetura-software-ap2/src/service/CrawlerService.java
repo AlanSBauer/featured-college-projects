@@ -8,14 +8,8 @@ import domain.ProductLink;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class CrawlerService {
-    /** Sites que bloqueiam CURL: link fica no cadastro, preco so via navegador. */
-    private static final Set<String> MANUAL_ONLY_STORES = Set.of(
-            "Mercado Livre",
-            "Magazine Luiza"
-    );
 
     private final ProductService productService;
     private final PlaywrightScraper scraper;
@@ -42,14 +36,10 @@ public class CrawlerService {
             String bestStore = null;
 
             for (ProductLink link : links) {
-                if (isManualOnlyStore(link.getStoreName())) {
-                    System.out.println(link.getStoreName()
-                            + ": link para conferencia no navegador (site bloqueia CURL).");
-                    continue;
-                }
-
                 Float price = scraper.getPrice(link.getStoreName(), link.getUrl());
                 if (price != null) {
+                    System.out.println("  " + link.getStoreName() + ": R$ "
+                            + String.format("%.2f", price));
                     if (lowestPrice == null || price < lowestPrice) {
                         lowestPrice = price;
                         bestStore = link.getStoreName();
@@ -127,11 +117,4 @@ public class CrawlerService {
         );
     }
 
-    private boolean isManualOnlyStore(String storeName) {
-        if (storeName == null) {
-            return false;
-        }
-        return MANUAL_ONLY_STORES.stream()
-                .anyMatch(s -> s.equalsIgnoreCase(storeName.trim()));
-    }
 }

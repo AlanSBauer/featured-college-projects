@@ -13,10 +13,10 @@ import java.util.logging.Logger;
 public class Main {
 
   /**
-   * v7: 2 links Kabum (preco via CURL) + ML (link correto, consulta manual).
-   * Mercado Livre bloqueia CURL; comparacao automatica entre anuncios Kabum.
+   * v8: 2 lojas por produto (Kabum + Amazon), precos via CURL nas duas.
+   * Mercado Livre bloqueia acesso automatico; Amazon responde de forma estavel.
    */
-  private static final int CATALOG_VERSION = 7;
+  private static final int CATALOG_VERSION = 8;
 
   public static void main(String[] args) {
     quietHibernateLogs();
@@ -34,41 +34,34 @@ public class Main {
 
     if (existingProducts.isEmpty()) {
       System.out.println("Banco de dados vazio. Cadastrando produtos de exemplo...\n");
-      System.out.println("Nota: precos automaticos via CURL na Kabum.");
-      System.out.println("Links do Mercado Livre sao para conferencia no navegador.\n");
+      System.out.println("Nota: precos automaticos via CURL (Kabum + Amazon).\n");
 
       System.out.println("Cadastrando: PlayStation 5");
       Product ps5 = new Product("PS5-001", "PlayStation 5", 0f);
       ps5.addLink(new ProductLink("Kabum",
           "https://www.kabum.com.br/produto/939944/console-playstation-5-slim-digital-edition-825gb-usb-hdmi-branco"));
-      ps5.addLink(new ProductLink("Kabum Marketplace",
-          "https://www.kabum.com.br/produto/542929/console-playstation-5-slim-ssd-1tb-edicao-digital-branco-2-jogos-digitais-1000038914"));
-      ps5.addLink(new ProductLink("Mercado Livre",
-          "https://produto.mercadolivre.com.br/MLB-4901851404-console-playstation-5-slim-edico-digital-sony-1-tb-_JM"));
+      ps5.addLink(new ProductLink("Amazon",
+          "https://www.amazon.com.br/dp/B0CL61F39H"));
       productService.create(ps5);
-      System.out.println("PlayStation 5 -> 2x Kabum (crawler) + ML (manual)\n");
+      System.out.println("PlayStation 5 -> Kabum + Amazon\n");
 
       System.out.println("Cadastrando: Xbox Series X");
       Product xbox = new Product("XBOX-001", "Xbox Series X", 0f);
       xbox.addLink(new ProductLink("Kabum",
           "https://www.kabum.com.br/produto/678178/console-xbox-series-x-1tb-microsoft-bivolt-branco"));
-      xbox.addLink(new ProductLink("Kabum Marketplace",
-          "https://www.kabum.com.br/produto/128560/console-microsoft-xbox-series-x-1tb-preto-rrt-00006"));
-      xbox.addLink(new ProductLink("Mercado Livre",
-          "https://www.mercadolivre.com.br/microsoft-xbox-series-x-1tb/p/MLB16160759"));
+      xbox.addLink(new ProductLink("Amazon",
+          "https://www.amazon.com.br/dp/B08H75RTZ8"));
       productService.create(xbox);
-      System.out.println("Xbox Series X -> 2x Kabum (crawler) + ML (manual)\n");
+      System.out.println("Xbox Series X -> Kabum + Amazon\n");
 
       System.out.println("Cadastrando: Monitor LG 27 polegadas");
       Product monitor = new Product("MON-001", "Monitor LG 27 polegadas", 0f);
       monitor.addLink(new ProductLink("Kabum",
           "https://www.kabum.com.br/produto/323895/monitor-gamer-lg-27-full-hd-ips-hdmi-e-vesa-freesync-ajuste-de-angulo-bordas-finas-preto-27mp400-b"));
-      monitor.addLink(new ProductLink("Kabum Marketplace",
-          "https://www.kabum.com.br/produto/299641/monitor-lg-27-full-hd-75hz-5ms-ps-hdmi-preto-27mp400-b-awzm"));
-      monitor.addLink(new ProductLink("Mercado Livre",
-          "https://produto.mercadolivre.com.br/MLB-18645884-monitor-gamer-lg-27mp400-27-cor-preto-100v240v-_JM"));
+      monitor.addLink(new ProductLink("Amazon",
+          "https://www.amazon.com.br/dp/B09JT2FRXF"));
       productService.create(monitor);
-      System.out.println("Monitor LG -> 2x Kabum (crawler) + ML (manual)\n");
+      System.out.println("Monitor LG -> Kabum + Amazon\n");
 
       markCatalogSeeded();
       System.out.println("Todos os produtos foram cadastrados com sucesso!");
@@ -91,7 +84,7 @@ public class Main {
       System.out.println("SKU: " + product.getSku());
 
       if (product.getPrice() != null && product.getPrice() > 0) {
-        System.out.println("Menor preço atual (via CURL/Kabum): R$ "
+        System.out.println("Menor preço atual (Kabum + Amazon): R$ "
             + String.format("%.2f", product.getPrice()));
       } else {
         System.out.println("Menor preço atual: (nenhum preço coletado nesta execução)");

@@ -93,6 +93,11 @@ public class PlaywrightScraper {
                 return null;
             }
 
+            if (storeName != null && storeName.equalsIgnoreCase("Amazon") && isAmazonUnavailable(html)) {
+                System.out.println("Produto indisponivel na Amazon no momento.");
+                return null;
+            }
+
             String priceText = extractPrice(storeName, html);
 
             if (priceText != null && !priceText.isEmpty()) {
@@ -142,7 +147,14 @@ public class PlaywrightScraper {
                 || html.contains("Não é possível acessar a página")
                 || html.contains("Nao e possivel acessar a pagina")
                 || html.contains("bot detection")
-                || html.contains("Enter the characters you see below");
+                || html.contains("Enter the characters you see below")
+                || html.contains("Type the characters you see in this image");
+    }
+
+    private boolean isAmazonUnavailable(String html) {
+        return html.contains("Currently unavailable")
+                || html.contains("Não disponível.")
+                || html.contains("Nao disponivel.");
     }
 
     /** Verifica disponibilidade no HTML (JSON-LD da Kabum e textos comuns). */
@@ -182,16 +194,16 @@ public class PlaywrightScraper {
                 if (price != null) {
                     return price;
                 }
-            } else if (storeName.equalsIgnoreCase("Mercado Livre")) {
+            } else if (storeName.equalsIgnoreCase("Amazon")) {
                 String price = findFirstMatch(html, Pattern.compile(
-                        "\"price\"\\s*:\\s*(\\d+(?:\\.\\d+)?)",
+                        "customerVisiblePrice\\]\\[amount\\]\"\\s+value=\"(\\d+(?:\\.\\d+)?)\"",
                         Pattern.CASE_INSENSITIVE
                 ));
                 if (price != null) {
                     return price;
                 }
                 price = findFirstMatch(html, Pattern.compile(
-                        "itemprop=\"price\"[^>]+content=\"(\\d+(?:\\.\\d+)?)\"",
+                        "<span class=\"a-offscreen\">\\s*R\\$\\s*([\\d.,]+)\\s*</span>",
                         Pattern.CASE_INSENSITIVE
                 ));
                 if (price != null) {
