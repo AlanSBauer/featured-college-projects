@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Pesquisas - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            height: 400px;
+        }
+
+        .chart-container h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        canvas {
+            max-height: 300px;
+        }
+
+        .data-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-top: 40px;
+        }
+
+        .data-table h3 {
+            color: #667eea;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #667eea;
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .metric-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .metric-high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .metric-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .metric-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .sentiment-positive {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .sentiment-negative {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .sentiment-neutral {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .refresh-btn:hover {
+            background: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            table th, table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Análise de Pesquisas</h1>
+            <p>Dashboard com métricas e gráficos dos resultados</p>
+        </header>
+
+        <button class="refresh-btn" onclick="loadData()">🔄 Atualizar Dados</button>
+
+        <div id="loading" class="loading" style="display: none;">
+            ⏳ Carregando dados...
+        </div>
+
+        <div id="error" class="error-message" style="display: none;"></div>
+
+        <div id="content" style="display: none;">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total de Respostas</h3>
+                    <div class="value" id="totalRespostas">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Respostas Válidas</h3>
+                    <div class="value" id="respostasValidas">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Clareza Média</h3>
+                    <div class="value" id="clareza">0.0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Relevância Média</h3>
+                    <div class="value" id="relevancia">0.0</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Sentimentos Detectados</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="chartSentimento"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Satisfação Estimada</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="chartSatisfacao"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Avaliação Geral</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="chartAvaliacao"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Tipo de Respostas</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="chartClassificacao"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container" style="grid-column: span 2;">
+                    <h3>Métricas Médias</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="chartMetricas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-table">
+                <h3>📋 Detalhes das Respostas</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pergunta</th>
+                            <th>Resposta</th>
+                            <th>Sentimento</th>
+                            <th>Relevância</th>
+                            <th>Clareza</th>
+                            <th>Satisfação</th>
+                            <th>Avaliação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chartsInstances = {};
+
+        async function loadData() {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const content = document.getElementById('content');
+
+            loading.style.display = 'block';
+            error.style.display = 'none';
+            content.style.display = 'none';
+
+            try {
+                const response = await fetch('http://localhost:3000/usuarios');
+                if (!response.ok) throw new Error(`Erro: ${response.status}`);
+
+                const data = await response.json();
+                console.log('Dados recebidos:', data);
+
+                processData(data.dados);
+                loading.style.display = 'none';
+                content.style.display = 'block';
+            } catch (err) {
+                console.error('Erro ao carregar dados:', err);
+                loading.style.display = 'none';
+                error.style.display = 'block';
+                error.textContent = '❌ Erro ao carregar dados: ' + err.message + '\nCertifique-se de que o servidor está rodando em http://localhost:3000';
+            }
+        }
+
+        function processData(dados) {
+            // Stats
+            document.getElementById('totalRespostas').textContent = dados.length;
+
+            let validCount = 0;
+            let clarezaTotal = 0;
+            let relevanciaTotal = 0;
+            let sentimentos = {};
+            let satisfacoes = {};
+            let avaliacoes = {};
+            let classificacoes = {};
+
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            dados.forEach(doc => {
+                const metricas = doc.metricas;
+
+                if (metricas.resposta_valida) validCount++;
+                clarezaTotal += metricas.clareza_da_resposta || 0;
+                relevanciaTotal += metricas.relevancia_com_a_pergunta || 0;
+
+                // Count categories
+                sentimentos[metricas.sentimento] = (sentimentos[metricas.sentimento] || 0) + 1;
+                satisfacoes[metricas.satisfacao_estimada] = (satisfacoes[metricas.satisfacao_estimada] || 0) + 1;
+                avaliacoes[metricas.avaliacao_geral] = (avaliacoes[metricas.avaliacao_geral] || 0) + 1;
+                classificacoes[metricas.classificacao] = (classificacoes[metricas.classificacao] || 0) + 1;
+
+                // Add row to table
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td title="${doc.question}">${doc.question.substring(0, 30)}...</td>
+                    <td title="${doc.message}">${doc.message.substring(0, 30)}...</td>
+                    <td><span class="metric-badge sentiment-${metricas.sentimento.toLowerCase()}">${metricas.sentimento}</span></td>
+                    <td>${(metricas.relevancia_com_a_pergunta * 100).toFixed(0)}%</td>
+                    <td>${(metricas.clareza_da_resposta * 100).toFixed(0)}%</td>
+                    <td><span class="metric-badge">${metricas.satisfacao_estimada}</span></td>
+                    <td><span class="metric-badge">${metricas.avaliacao_geral}</span></td>
+                `;
+            });
+
+            // Update stats
+            document.getElementById('respostasValidas').textContent = validCount;
+            document.getElementById('clareza').textContent = (clarezaTotal / dados.length).toFixed(1);
+            document.getElementById('relevancia').textContent = (relevanciaTotal / dados.length).toFixed(1);
+
+            // Create charts
+            createCharts(sentimentos, satisfacoes, avaliacoes, classificacoes, dados);
+        }
+
+        function createCharts(sentimentos, satisfacoes, avaliacoes, classificacoes, dados) {
+            const ctxSentimento = document.getElementById('chartSentimento').getContext('2d');
+            const ctxSatisfacao = document.getElementById('chartSatisfacao').getContext('2d');
+            const ctxAvaliacao = document.getElementById('chartAvaliacao').getContext('2d');
+            const ctxClassificacao = document.getElementById('chartClassificacao').getContext('2d');
+            const ctxMetricas = document.getElementById('chartMetricas').getContext('2d');
+
+            // Destroy previous charts if they exist
+            Object.values(chartsInstances).forEach(chart => chart.destroy());
+            chartsInstances = {};
+
+            // Colors
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a'];
+
+            // Chart 1: Sentimentos
+            chartsInstances.sentimento = new Chart(ctxSentimento, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(sentimentos),
+                    datasets: [{
+                        data: Object.values(sentimentos),
+                        backgroundColor: colors,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Satisfação
+            chartsInstances.satisfacao = new Chart(ctxSatisfacao, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(satisfacoes),
+                    datasets: [{
+                        label: 'Quantidade',
+                        data: Object.values(satisfacoes),
+                        backgroundColor: '#667eea',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 3: Avaliação
+            chartsInstances.avaliacao = new Chart(ctxAvaliacao, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(avaliacoes),
+                    datasets: [{
+                        label: 'Quantidade',
+                        data: Object.values(avaliacoes),
+                        backgroundColor: '#764ba2',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 4: Classificação
+            chartsInstances.classificacao = new Chart(ctxClassificacao, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(classificacoes),
+                    datasets: [{
+                        data: Object.values(classificacoes),
+                        backgroundColor: colors,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Chart 5: Métricas Médias
+            const metricasLabels = ['Relevância', 'Clareza', 'Completude', 'Polaridade'];
+            const metricasData = [
+                dados.reduce((acc, doc) => acc + (doc.metricas.relevancia_com_a_pergunta || 0), 0) / dados.length,
+                dados.reduce((acc, doc) => acc + (doc.metricas.clareza_da_resposta || 0), 0) / dados.length,
+                dados.reduce((acc, doc) => acc + (doc.metricas.completude_da_resposta || 0), 0) / dados.length,
+                dados.reduce((acc, doc) => acc + (doc.metricas.polaridade || 0), 0) / dados.length
+            ];
+
+            chartsInstances.metricas = new Chart(ctxMetricas, {
+                type: 'radar',
+                data: {
+                    labels: metricasLabels,
+                    datasets: [{
+                        label: 'Média',
+                        data: metricasData,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 1,
+                            ticks: {
+                                stepSize: 0.2
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>
