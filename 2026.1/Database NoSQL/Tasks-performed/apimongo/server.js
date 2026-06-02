@@ -13,14 +13,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const COLLECTION = 'respostaMensagens';
 
-// Middleware CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
 
-// Servir arquivos estáticos
 app.use(express.static(__dirname));
 
 async function chatgptResponse(question, answer) {
@@ -49,7 +47,7 @@ async function chatgptResponse(question, answer) {
     return response;
 }
 
-app.get('/usuarios', async (req, res) => {
+app.get('/rodaETL', async (req, res) => {
     const db = await connection.getDb();
     const docs = await db.collection(COLLECTION).find({}).toArray();
     await Promise.all(docs.map(async (doc) => {
@@ -60,6 +58,64 @@ app.get('/usuarios', async (req, res) => {
         console.log(responseChatgpt);
     }));
     res.json({ total: docs.length, dados: docs });
+});
+
+app.get("/relatorio", async (req, res) => {
+  const db = await connection.getDb();
+
+  const docs = await db.collection(COLLECTION).aggregate([
+    {
+      $group: {
+        _id: null,
+
+        total_respostas: {
+          $sum: 1
+        },
+
+        media_relevancia: {
+          $avg: "$metricas.relevancia_com_a_pergunta"
+        },
+
+        media_clareza: {
+          $avg: "$metricas.clareza_da_resposta"
+        },
+
+        media_completude: {
+          $avg: "$metricas.completude_da_resposta"
+        },
+
+        polaridade_media: {
+          $avg: "$metricas.polaridade"
+        }
+      }
+    },
+
+    {
+      $project: {
+        _id: 0,
+
+        total_respostas: 1,
+
+        media_relevancia: {
+          $round: ["$media_relevancia", 2]
+        },
+
+        media_clareza: {
+          $round: ["$media_clareza", 2]
+        },
+
+        media_completude: {
+          $round: ["$media_completude", 2]
+        },
+
+        polaridade_media: {
+          $round: ["$polaridade_media", 2]
+        }
+      }
+    }
+  ]).toArray();
+
+  res.json(docs);
 });
 
 app.listen(PORT, () => {
