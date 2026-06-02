@@ -116,4 +116,4 @@ A API estará disponível em: `http://localhost:3000/viagens`
 
 ## Link do vídeo demonstrativo
 
-[INSERIR LINK PÚBLICO DO VÍDEO AQUI]
+https://drive.google.com/drive/folders/166LlpDmQjP8CrkKkjkPg_htuzYmr8ZFz?usp=sharing
