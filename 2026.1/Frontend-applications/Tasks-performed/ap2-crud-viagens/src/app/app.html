@@ -1,0 +1,13 @@
+<app-navbar></app-navbar>
+
+<main class="container">
+  <app-viagem-form
+    [viagemParaEditar]="viagemParaEditar"
+    (salvo)="aoSalvar()"
+    (cancelarEdicao)="aoCancelarEdicao()"
+  ></app-viagem-form>
+
+  <app-viagem-list
+    (editarViagem)="iniciarEdicao($event)"
+  ></app-viagem-list>
+</main>

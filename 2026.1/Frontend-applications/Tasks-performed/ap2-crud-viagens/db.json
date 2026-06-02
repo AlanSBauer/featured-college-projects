@@ -1,0 +1,37 @@
+{
+  "viagens": [
+    {
+      "id": "1",
+      "destino": "Paris, França",
+      "pais": "França",
+      "dataPartida": "2025-06-15",
+      "dataRetorno": "2025-06-25",
+      "orcamento": 8500,
+      "tipoViagem": "Turismo",
+      "realizada": false,
+      "observacoes": "Visitar o Museu do Louvre e a Torre Eiffel"
+    },
+    {
+      "id": "2",
+      "destino": "Tokyo, Japão",
+      "pais": "Japão",
+      "dataPartida": "2025-09-01",
+      "dataRetorno": "2025-09-15",
+      "orcamento": 12000,
+      "tipoViagem": "Aventura",
+      "realizada": false,
+      "observacoes": "Explorar Akihabara e o Monte Fuji"
+    },
+    {
+      "id": "3",
+      "destino": "Rio de Janeiro, Brasil",
+      "pais": "Brasil",
+      "dataPartida": "2024-12-20",
+      "dataRetorno": "2024-12-28",
+      "orcamento": 3200,
+      "tipoViagem": "Lazer",
+      "realizada": true,
+      "observacoes": "Réveillon em Copacabana"
+    }
+  ]
+}

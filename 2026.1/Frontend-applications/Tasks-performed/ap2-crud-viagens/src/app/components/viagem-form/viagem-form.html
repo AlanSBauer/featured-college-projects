@@ -1,0 +1,173 @@
+<section class="form-section">
+  <div class="form-header">
+    <h2 class="form-title">
+      @if (modoEdicao) {
+        <span>✏️ Editar Viagem</span>
+      } @else {
+        <span>✈️ Nova Viagem</span>
+      }
+    </h2>
+    <p class="form-subtitle">
+      @if (modoEdicao) {
+        Altere os dados da viagem selecionada
+      } @else {
+        Registre um novo destino no seu diário
+      }
+    </p>
+  </div>
+
+  @if (mensagem) {
+    <div class="mensagem" [class.sucesso]="tipoMensagem === 'sucesso'" [class.erro]="tipoMensagem === 'erro'">
+      {{ mensagem }}
+    </div>
+  }
+
+  <form (ngSubmit)="salvar()" #formViagem="ngForm" class="viagem-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="destino">Destino *</label>
+        <input
+          id="destino"
+          name="destino"
+          type="text"
+          [(ngModel)]="viagem.destino"
+          required
+          minlength="3"
+          placeholder="Ex: Paris, França"
+          #destinoRef="ngModel"
+        />
+        @if (destinoRef.invalid && destinoRef.touched) {
+          <span class="campo-erro">Destino é obrigatório (mínimo 3 caracteres)</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="pais">País *</label>
+        <input
+          id="pais"
+          name="pais"
+          type="text"
+          [(ngModel)]="viagem.pais"
+          required
+          minlength="2"
+          placeholder="Ex: França"
+          #paisRef="ngModel"
+        />
+        @if (paisRef.invalid && paisRef.touched) {
+          <span class="campo-erro">País é obrigatório</span>
+        }
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dataPartida">Data de Partida *</label>
+        <input
+          id="dataPartida"
+          name="dataPartida"
+          type="date"
+          [(ngModel)]="viagem.dataPartida"
+          required
+          #dataPartidaRef="ngModel"
+        />
+        @if (dataPartidaRef.invalid && dataPartidaRef.touched) {
+          <span class="campo-erro">Data de partida é obrigatória</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="dataRetorno">Data de Retorno *</label>
+        <input
+          id="dataRetorno"
+          name="dataRetorno"
+          type="date"
+          [(ngModel)]="viagem.dataRetorno"
+          required
+          #dataRetornoRef="ngModel"
+        />
+        @if (dataRetornoRef.invalid && dataRetornoRef.touched) {
+          <span class="campo-erro">Data de retorno é obrigatória</span>
+        }
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="orcamento">Orçamento (R$) *</label>
+        <input
+          id="orcamento"
+          name="orcamento"
+          type="number"
+          [(ngModel)]="viagem.orcamento"
+          required
+          min="0"
+          step="0.01"
+          placeholder="0,00"
+          #orcamentoRef="ngModel"
+        />
+        @if (orcamentoRef.invalid && orcamentoRef.touched) {
+          <span class="campo-erro">Orçamento é obrigatório</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="tipoViagem">Tipo de Viagem *</label>
+        <select
+          id="tipoViagem"
+          name="tipoViagem"
+          [(ngModel)]="viagem.tipoViagem"
+          required
+        >
+          @for (tipo of tiposViagem; track tipo) {
+            <option [value]="tipo">{{ tipo }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="observacoes">Observações</label>
+      <textarea
+        id="observacoes"
+        name="observacoes"
+        [(ngModel)]="viagem.observacoes"
+        rows="3"
+        placeholder="Pontos turísticos, anotações, dicas..."
+      ></textarea>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input
+          name="realizada"
+          type="checkbox"
+          [(ngModel)]="viagem.realizada"
+        />
+        <span class="checkbox-custom"></span>
+        Viagem já realizada
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="formViagem.invalid || salvando"
+      >
+        @if (salvando) {
+          Salvando...
+        } @else if (modoEdicao) {
+          Salvar Alterações
+        } @else {
+          Cadastrar Viagem
+        }
+      </button>
+
+      @if (modoEdicao) {
+        <button type="button" class="btn btn-secondary" (click)="cancelar()">
+          Cancelar
+        </button>
+      }
+    </div>
+  </form>
+</section>

@@ -1,0 +1,100 @@
+<section class="list-section">
+  <div class="list-header">
+    <h2 class="list-title">🗺️ Minhas Viagens</h2>
+    <button type="button" class="btn-refresh" (click)="carregarViagens()" title="Atualizar lista">
+      ↻ Atualizar
+    </button>
+  </div>
+
+  @if (carregando) {
+    <div class="estado-info">
+      <div class="spinner"></div>
+      <p>Carregando viagens...</p>
+    </div>
+  }
+
+  @if (erroCarregamento && !carregando) {
+    <div class="estado-erro">
+      <span class="estado-icone">⚠️</span>
+      <p>Não foi possível carregar as viagens.</p>
+      <small>Verifique se o JSON Server está rodando (<code>npm run api</code>)</small>
+      <button type="button" class="btn btn-sm" (click)="carregarViagens()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (!carregando && !erroCarregamento && viagens.length === 0) {
+    <div class="estado-vazio">
+      <span class="estado-icone">🧳</span>
+      <p>Nenhuma viagem cadastrada ainda.</p>
+      <small>Adicione sua primeira viagem usando o formulário acima!</small>
+    </div>
+  }
+
+  @if (!carregando && viagens.length > 0) {
+    <div class="table-wrapper">
+      <table class="viagens-table">
+        <thead>
+          <tr>
+            <th>Destino</th>
+            <th>País</th>
+            <th>Partida</th>
+            <th>Retorno</th>
+            <th>Orçamento</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (viagem of viagens; track viagem.id) {
+            <tr [class.realizada]="viagem.realizada">
+              <td class="col-destino">
+                <strong>{{ viagem.destino }}</strong>
+                @if (viagem.observacoes) {
+                  <small class="obs">{{ viagem.observacoes }}</small>
+                }
+              </td>
+              <td>{{ viagem.pais }}</td>
+              <td>{{ formatarData(viagem.dataPartida) }}</td>
+              <td>{{ formatarData(viagem.dataRetorno) }}</td>
+              <td class="col-orcamento">{{ formatarOrcamento(viagem.orcamento) }}</td>
+              <td>
+                <span class="badge badge-tipo">{{ viagem.tipoViagem }}</span>
+              </td>
+              <td>
+                @if (viagem.realizada) {
+                  <span class="badge badge-realizada">Realizada</span>
+                } @else {
+                  <span class="badge badge-planejada">Planejada</span>
+                }
+              </td>
+              <td class="col-acoes">
+                <button
+                  type="button"
+                  class="btn-acao btn-editar"
+                  (click)="editar(viagem)"
+                  title="Editar viagem"
+                >
+                  ✏️ Editar
+                </button>
+                <button
+                  type="button"
+                  class="btn-acao btn-excluir"
+                  (click)="excluir(viagem)"
+                  title="Excluir viagem"
+                >
+                  🗑️ Excluir
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="list-footer">
+      <span class="total">{{ viagens.length }} viagem(ns) cadastrada(s)</span>
+      <span class="total-realizadas">✅ {{ totalRealizadas }} realizada(s)</span>
+    </div>
+  }
+</section>
