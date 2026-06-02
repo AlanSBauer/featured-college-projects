@@ -2,10 +2,10 @@
 
 ## Identificação
 
-Nome: Alan dos Santos Bauer
-Curso: Análise e Desenvolvimento de Sistemas
-Disciplina: Aplicações Front-End
-Instituição: ULBRA
+- **Nome:** Alan dos Santos Bauer
+- **Curso:** Análise e Desenvolvimento de Sistemas
+- **Disciplina:** Aplicações Front-End
+- **Instituição:** ULBRA
 
 ## Tema do projeto
 
