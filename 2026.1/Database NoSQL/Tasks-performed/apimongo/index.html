@@ -6,11 +6,7 @@
     <title>Análise de Pesquisas - Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,15 +15,12 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1400px; margin: 0 auto; }
 
         header {
             text-align: center;
             color: white;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         header h1 {
@@ -35,6 +28,38 @@
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
+
+        .filter-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar label {
+            font-weight: 600;
+            color: #667eea;
+            white-space: nowrap;
+        }
+
+        .filter-bar select {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            color: #333;
+            background: white;
+            cursor: pointer;
+        }
+
+        .filter-bar select:focus { outline: none; border-color: #764ba2; }
 
         .loading {
             text-align: center;
@@ -94,14 +119,8 @@
             font-size: 1.2em;
         }
 
-        .chart-wrapper {
-            position: relative;
-            height: 300px;
-        }
-
-        canvas {
-            max-height: 300px;
-        }
+        .chart-wrapper { position: relative; height: 300px; }
+        canvas { max-height: 300px; }
 
         .data-table {
             background: white;
@@ -119,10 +138,7 @@
             margin: 0;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        table { width: 100%; border-collapse: collapse; }
 
         table th {
             background: #667eea;
@@ -132,14 +148,8 @@
             font-weight: 600;
         }
 
-        table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        table tr:hover {
-            background: #f8f9fa;
-        }
+        table td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+        table tr:hover { background: #f8f9fa; }
 
         .metric-badge {
             display: inline-block;
@@ -149,35 +159,13 @@
             font-weight: 600;
         }
 
-        .metric-high {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .metric-medium {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .metric-low {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .sentiment-positive {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .sentiment-negative {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .sentiment-neutral {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
+        .metric-high { background: #d4edda; color: #155724; }
+        .metric-medium { background: #fff3cd; color: #856404; }
+        .metric-low { background: #f8d7da; color: #721c24; }
+        .sentiment-positivo { background: #d4edda; color: #155724; }
+        .sentiment-negativo { background: #f8d7da; color: #721c24; }
+        .sentiment-neutro { background: #d1ecf1; color: #0c5460; }
+        .sentiment-indefinido { background: #e2e3e5; color: #383d41; }
 
         .error-message {
             background: #f8d7da;
@@ -188,39 +176,32 @@
             border: 1px solid #f5c6cb;
         }
 
-        .refresh-btn {
+        .btn {
             background: #667eea;
             color: white;
             border: none;
             padding: 12px 30px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1em;
             font-weight: 600;
             transition: background 0.3s;
-            margin-bottom: 20px;
         }
 
-        .refresh-btn:hover {
-            background: #764ba2;
+        .btn:hover { background: #764ba2; }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         @media (max-width: 768px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            header h1 {
-                font-size: 1.8em;
-            }
-
-            table {
-                font-size: 0.9em;
-            }
-
-            table th, table td {
-                padding: 10px;
-            }
+            .charts-grid { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.8em; }
+            table { font-size: 0.9em; }
+            table th, table td { padding: 10px; }
         }
     </style>
 </head>
@@ -231,16 +212,22 @@
             <p>Dashboard com métricas e gráficos dos resultados</p>
         </header>
 
-        <button class="refresh-btn" onclick="loadData()">🔄 Atualizar Dados</button>
-
-        <div id="loading" class="loading" style="display: none;">
-            ⏳ Carregando dados...
+        <div class="top-actions">
+            <button class="btn" onclick="loadData()">🔄 Atualizar Dados</button>
         </div>
 
+        <!-- Filtro por pergunta/tema -->
+        <div class="filter-bar">
+            <label>🔍 Filtrar por pergunta:</label>
+            <select id="questionFilter" onchange="loadData()">
+                <option value="">— Todas as perguntas —</option>
+            </select>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">⏳ Carregando dados...</div>
         <div id="error" class="error-message" style="display: none;"></div>
 
         <div id="content" style="display: none;">
-            <!-- Stats Cards -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total de Respostas</h3>
@@ -260,45 +247,29 @@
                 </div>
             </div>
 
-            <!-- Charts -->
             <div class="charts-grid">
                 <div class="chart-container">
                     <h3>Sentimentos Detectados</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartSentimento"></canvas>
-                    </div>
+                    <div class="chart-wrapper"><canvas id="chartSentimento"></canvas></div>
                 </div>
-
                 <div class="chart-container">
                     <h3>Satisfação Estimada</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartSatisfacao"></canvas>
-                    </div>
+                    <div class="chart-wrapper"><canvas id="chartSatisfacao"></canvas></div>
                 </div>
-
                 <div class="chart-container">
                     <h3>Avaliação Geral</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartAvaliacao"></canvas>
-                    </div>
+                    <div class="chart-wrapper"><canvas id="chartAvaliacao"></canvas></div>
                 </div>
-
                 <div class="chart-container">
                     <h3>Tipo de Respostas</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartClassificacao"></canvas>
-                    </div>
+                    <div class="chart-wrapper"><canvas id="chartClassificacao"></canvas></div>
                 </div>
-
                 <div class="chart-container" style="grid-column: span 2;">
                     <h3>Métricas Médias</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartMetricas"></canvas>
-                    </div>
+                    <div class="chart-wrapper"><canvas id="chartMetricas"></canvas></div>
                 </div>
             </div>
 
-            <!-- Data Table -->
             <div class="data-table">
                 <h3>📋 Detalhes das Respostas</h3>
                 <table>
@@ -313,9 +284,7 @@
                             <th>Avaliação</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
-                        <!-- Populated by JavaScript -->
-                    </tbody>
+                    <tbody id="tableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -323,6 +292,23 @@
 
     <script>
         let chartsInstances = {};
+
+        // Carrega as perguntas únicas no select
+        async function loadQuestions() {
+            try {
+                const res = await fetch('http://localhost:3000/perguntas');
+                const perguntas = await res.json();
+                const select = document.getElementById('questionFilter');
+                perguntas.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p;
+                    opt.textContent = p.length > 80 ? p.substring(0, 80) + '...' : p;
+                    select.appendChild(opt);
+                });
+            } catch (err) {
+                console.warn('Não foi possível carregar as perguntas:', err);
+            }
+        }
 
         async function loadData() {
             const loading = document.getElementById('loading');
@@ -334,7 +320,10 @@
             content.style.display = 'none';
 
             try {
-                const response = await fetch('http://localhost:3000/usuarios');
+                const question = document.getElementById('questionFilter').value;
+                const params = question ? `?question=${encodeURIComponent(question)}` : '';
+
+                const response = await fetch(`http://localhost:3000/usuarios${params}`);
                 if (!response.ok) throw new Error(`Erro: ${response.status}`);
 
                 const data = await response.json();
@@ -352,7 +341,6 @@
         }
 
         function processData(dados) {
-            // Stats
             document.getElementById('totalRespostas').textContent = dados.length;
 
             let validCount = 0;
@@ -368,206 +356,91 @@
 
             dados.forEach(doc => {
                 const metricas = doc.metricas;
+                if (!metricas) return;
 
                 if (metricas.resposta_valida) validCount++;
                 clarezaTotal += metricas.clareza_da_resposta || 0;
                 relevanciaTotal += metricas.relevancia_com_a_pergunta || 0;
 
-                // Count categories
                 sentimentos[metricas.sentimento] = (sentimentos[metricas.sentimento] || 0) + 1;
                 satisfacoes[metricas.satisfacao_estimada] = (satisfacoes[metricas.satisfacao_estimada] || 0) + 1;
                 avaliacoes[metricas.avaliacao_geral] = (avaliacoes[metricas.avaliacao_geral] || 0) + 1;
                 classificacoes[metricas.classificacao] = (classificacoes[metricas.classificacao] || 0) + 1;
 
-                // Add row to table
                 const row = tableBody.insertRow();
+                const sentClass = 'sentiment-' + (metricas.sentimento || 'indefinido').toLowerCase();
                 row.innerHTML = `
-                    <td title="${doc.question}">${doc.question.substring(0, 30)}...</td>
-                    <td title="${doc.message}">${doc.message.substring(0, 30)}...</td>
-                    <td><span class="metric-badge sentiment-${metricas.sentimento.toLowerCase()}">${metricas.sentimento}</span></td>
-                    <td>${(metricas.relevancia_com_a_pergunta * 100).toFixed(0)}%</td>
-                    <td>${(metricas.clareza_da_resposta * 100).toFixed(0)}%</td>
+                    <td title="${doc.question}">${doc.question.substring(0, 40)}...</td>
+                    <td title="${doc.message}">${doc.message.substring(0, 40)}...</td>
+                    <td><span class="metric-badge ${sentClass}">${metricas.sentimento}</span></td>
+                    <td>${((metricas.relevancia_com_a_pergunta || 0) * 100).toFixed(0)}%</td>
+                    <td>${((metricas.clareza_da_resposta || 0) * 100).toFixed(0)}%</td>
                     <td><span class="metric-badge">${metricas.satisfacao_estimada}</span></td>
                     <td><span class="metric-badge">${metricas.avaliacao_geral}</span></td>
                 `;
             });
 
-            // Update stats
             document.getElementById('respostasValidas').textContent = validCount;
-            document.getElementById('clareza').textContent = (clarezaTotal / dados.length).toFixed(1);
-            document.getElementById('relevancia').textContent = (relevanciaTotal / dados.length).toFixed(1);
+            document.getElementById('clareza').textContent = dados.length ? (clarezaTotal / dados.length).toFixed(2) : '0.00';
+            document.getElementById('relevancia').textContent = dados.length ? (relevanciaTotal / dados.length).toFixed(2) : '0.00';
 
-            // Create charts
             createCharts(sentimentos, satisfacoes, avaliacoes, classificacoes, dados);
         }
 
         function createCharts(sentimentos, satisfacoes, avaliacoes, classificacoes, dados) {
-            const ctxSentimento = document.getElementById('chartSentimento').getContext('2d');
-            const ctxSatisfacao = document.getElementById('chartSatisfacao').getContext('2d');
-            const ctxAvaliacao = document.getElementById('chartAvaliacao').getContext('2d');
-            const ctxClassificacao = document.getElementById('chartClassificacao').getContext('2d');
-            const ctxMetricas = document.getElementById('chartMetricas').getContext('2d');
-
-            // Destroy previous charts if they exist
             Object.values(chartsInstances).forEach(chart => chart.destroy());
             chartsInstances = {};
 
-            // Colors
             const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a'];
 
-            // Chart 1: Sentimentos
-            chartsInstances.sentimento = new Chart(ctxSentimento, {
+            chartsInstances.sentimento = new Chart(
+                document.getElementById('chartSentimento').getContext('2d'), {
                 type: 'doughnut',
-                data: {
-                    labels: Object.keys(sentimentos),
-                    datasets: [{
-                        data: Object.values(sentimentos),
-                        backgroundColor: colors,
-                        borderColor: '#fff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
+                data: { labels: Object.keys(sentimentos), datasets: [{ data: Object.values(sentimentos), backgroundColor: colors, borderColor: '#fff', borderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
             });
 
-            // Chart 2: Satisfação
-            chartsInstances.satisfacao = new Chart(ctxSatisfacao, {
+            chartsInstances.satisfacao = new Chart(
+                document.getElementById('chartSatisfacao').getContext('2d'), {
                 type: 'bar',
-                data: {
-                    labels: Object.keys(satisfacoes),
-                    datasets: [{
-                        label: 'Quantidade',
-                        data: Object.values(satisfacoes),
-                        backgroundColor: '#667eea',
-                        borderRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
+                data: { labels: Object.keys(satisfacoes), datasets: [{ label: 'Quantidade', data: Object.values(satisfacoes), backgroundColor: '#667eea', borderRadius: 5 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
             });
 
-            // Chart 3: Avaliação
-            chartsInstances.avaliacao = new Chart(ctxAvaliacao, {
+            chartsInstances.avaliacao = new Chart(
+                document.getElementById('chartAvaliacao').getContext('2d'), {
                 type: 'bar',
-                data: {
-                    labels: Object.keys(avaliacoes),
-                    datasets: [{
-                        label: 'Quantidade',
-                        data: Object.values(avaliacoes),
-                        backgroundColor: '#764ba2',
-                        borderRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
+                data: { labels: Object.keys(avaliacoes), datasets: [{ label: 'Quantidade', data: Object.values(avaliacoes), backgroundColor: '#764ba2', borderRadius: 5 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
             });
 
-            // Chart 4: Classificação
-            chartsInstances.classificacao = new Chart(ctxClassificacao, {
+            chartsInstances.classificacao = new Chart(
+                document.getElementById('chartClassificacao').getContext('2d'), {
                 type: 'pie',
-                data: {
-                    labels: Object.keys(classificacoes),
-                    datasets: [{
-                        data: Object.values(classificacoes),
-                        backgroundColor: colors,
-                        borderColor: '#fff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
+                data: { labels: Object.keys(classificacoes), datasets: [{ data: Object.values(classificacoes), backgroundColor: colors, borderColor: '#fff', borderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
             });
 
-            // Chart 5: Métricas Médias
-            const metricasLabels = ['Relevância', 'Clareza', 'Completude', 'Polaridade'];
             const metricasData = [
-                dados.reduce((acc, doc) => acc + (doc.metricas.relevancia_com_a_pergunta || 0), 0) / dados.length,
-                dados.reduce((acc, doc) => acc + (doc.metricas.clareza_da_resposta || 0), 0) / dados.length,
-                dados.reduce((acc, doc) => acc + (doc.metricas.completude_da_resposta || 0), 0) / dados.length,
-                dados.reduce((acc, doc) => acc + (doc.metricas.polaridade || 0), 0) / dados.length
+                dados.reduce((acc, d) => acc + (d.metricas?.relevancia_com_a_pergunta || 0), 0) / dados.length,
+                dados.reduce((acc, d) => acc + (d.metricas?.clareza_da_resposta || 0), 0) / dados.length,
+                dados.reduce((acc, d) => acc + (d.metricas?.completude_da_resposta || 0), 0) / dados.length,
+                dados.reduce((acc, d) => acc + (d.metricas?.polaridade || 0), 0) / dados.length
             ];
 
-            chartsInstances.metricas = new Chart(ctxMetricas, {
+            chartsInstances.metricas = new Chart(
+                document.getElementById('chartMetricas').getContext('2d'), {
                 type: 'radar',
                 data: {
-                    labels: metricasLabels,
-                    datasets: [{
-                        label: 'Média',
-                        data: metricasData,
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#667eea'
-                    }]
+                    labels: ['Relevância', 'Clareza', 'Completude', 'Polaridade'],
+                    datasets: [{ label: 'Média', data: metricasData, borderColor: '#667eea', backgroundColor: 'rgba(102,126,234,0.1)', borderWidth: 2, pointBackgroundColor: '#667eea' }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 1,
-                            ticks: {
-                                stepSize: 0.2
-                            }
-                        }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { r: { beginAtZero: true, max: 1, ticks: { stepSize: 0.2 } } } }
             });
         }
 
-        // Load data on page load
-        loadData();
+        // Inicializa
+        loadQuestions().then(() => loadData());
     </script>
 </body>
 </html>
