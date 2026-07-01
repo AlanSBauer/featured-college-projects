@@ -942,9 +942,11 @@ public class Main {
     private static double lerLanceValido(Jogador jogador) {
         while (true) {
             double lance = lerDouble("Lance de " + jogador.getNome() + " (0 para passar): ");
-
             if (lance < 0) {
                 System.out.println("Lance invalido. Digite 0 para passar ou um valor positivo.");
+            } else if (lance == 0) {
+                // 0 significa passar — deve ser aceito mesmo que o jogador tenha saldo negativo
+                return 0;
             } else if (lance > jogador.getSaldo()) {
                 System.out.println("Lance maior que o saldo disponivel. Saldo: " + dinheiro(jogador.getSaldo()));
             } else {
