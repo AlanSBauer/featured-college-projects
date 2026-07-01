@@ -723,19 +723,52 @@ public class Main {
 
         Jogador vencedor = null;
         double maiorLance = 0.0;
-        ArrayList<Jogador> jogadores = jogadorService.getJogadores();
-        int indiceInicial = jogadores.indexOf(jogadorQueParou) + 1;
+        ArrayList<Jogador> todos = jogadorService.getJogadores();
 
-        for (int i = 0; i < jogadores.size(); i++) {
-            Jogador jogador = jogadores.get((indiceInicial + i) % jogadores.size());
+        // Construir lista de participantes elegiveis no leilao (remover falidos e o dono)
+        ArrayList<Jogador> participantes = new ArrayList<>();
+        for (Jogador j : todos) {
+            if (!j.isFalido() && j != imovel.getDono()) {
+                participantes.add(j);
+            }
+        }
 
-            if (jogador.isFalido() || jogador == imovel.getDono()) {
+        if (participantes.isEmpty()) {
+            System.out.println("Nenhum jogador elegivel para participar do leilao.");
+            return "Leilao sem participantes";
+        }
+
+        int indiceInicial = participantes.indexOf(jogadorQueParou);
+        if (indiceInicial == -1) {
+            indiceInicial = 0;
+        } else {
+            indiceInicial = (indiceInicial + 1) % participantes.size();
+        }
+
+        for (int i = 0; i < participantes.size(); i++) {
+            Jogador jogador = participantes.get((indiceInicial + i) % participantes.size());
+
+            if (jogador.isFalido()) {
+                // pular caso tenha se tornado falido entre o inicio e agora
                 continue;
             }
 
-            double lance = automatico
-                    ? Math.min(jogador.getSaldo(), imovel.getValorCompra() * (0.50 + (0.05 * i)))
-                    : lerLanceValido(jogador);
+            if (jogador.getSaldo() <= 0) {
+                System.out.println(jogador.getNome() + " nao tem saldo suficiente para ofertar e passa (saldo: " + dinheiro(jogador.getSaldo()) + ").");
+                continue;
+            }
+
+            double lance;
+            if (automatico) {
+                lance = Math.min(jogador.getSaldo(), imovel.getValorCompra() * (0.50 + (0.05 * i)));
+            } else {
+                // se o jogador estiver negativado, forcar passar
+                if (jogador.getSaldo() <= 0) {
+                    lance = 0;
+                } else {
+                    lance = lerLanceValido(jogador);
+                }
+            }
 
             if (lance > maiorLance && lance <= jogador.getSaldo()) {
                 maiorLance = lance;
