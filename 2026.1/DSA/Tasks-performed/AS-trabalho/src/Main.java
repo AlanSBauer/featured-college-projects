@@ -456,6 +456,13 @@ public class Main {
         double aluguelBase = imovel.calcularAluguel();
         double aluguelFinal = visitante.getPersonagem().modificarAluguel(aluguelBase);
 
+        // Se o visitante nao tem saldo suficiente para pagar o aluguel, declarar falencia
+        if (visitante.getSaldo() < aluguelFinal) {
+            System.out.println("Saldo insuficiente para pagar aluguel de " + dinheiro(aluguelFinal) + ". Declarando falencia.");
+            declararFalencia(visitante);
+            return "Falencia declarada ao tentar pagar aluguel de " + dinheiro(aluguelFinal);
+        }
+
         visitante.setSaldo(visitante.getSaldo() - aluguelFinal);
         dono.setSaldo(dono.getSaldo() + aluguelFinal);
 
@@ -507,6 +514,13 @@ public class Main {
         double patrimonio = jogador.calcularPatrimonio();
         double impostoBase = patrimonio * 0.05;
         double impostoFinal = jogador.getPersonagem().modificarImposto(impostoBase);
+
+        // Se o jogador nao tem saldo suficiente para pagar o imposto, declarar falencia
+        if (jogador.getSaldo() < impostoFinal) {
+            System.out.println("Saldo insuficiente para pagar imposto de " + dinheiro(impostoFinal) + ". Declarando falencia.");
+            declararFalencia(jogador);
+            return "Falencia declarada ao tentar pagar imposto de " + dinheiro(impostoFinal);
+        }
 
         jogador.setSaldo(jogador.getSaldo() - impostoFinal);
 
@@ -779,6 +793,20 @@ public class Main {
         jogador.setPreso(false);
         System.out.println("Falencia");
         System.out.println(jogador.getNome() + " foi declarado falido. Propriedades retornaram ao pool.");
+    }
+
+    private static void declararFalencia(Jogador jogador) {
+        // Devolver quaisquer propriedades do jogador ao pool (remover dono)
+        for (Imovel imovel : new ArrayList<>(jogador.getPropriedades())) {
+            imovel.setDono(null);
+        }
+        jogador.getPropriedades().clear();
+
+        jogador.setFalido(true);
+        jogador.setPreso(false);
+        System.out.println("Falencia");
+        System.out.println(jogador.getNome() + " foi declarado falido. Propriedades retornaram ao pool.");
+        historico.registrar(new HistoricoRodada(rodadaAtual, jogador.getNome(), 0, "Falencia", "Declarado falido"));
     }
 
     public static void executarTestes() {
