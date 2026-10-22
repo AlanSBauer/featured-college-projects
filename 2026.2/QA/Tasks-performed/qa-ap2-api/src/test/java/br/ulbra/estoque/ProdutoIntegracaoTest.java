@@ -37,9 +37,9 @@ class ProdutoIntegracaoTest {
         Produto produto = new Produto("Produto", 100, 20);
 
         Produto produtoCadastrado = service.cadastrar(produto);
-        Produto produtoEncontrado = service.darBaixa(produtoCadastrado.getId(), 5);
+        service.darBaixa(produtoCadastrado.getId(), 5);
 
-        service.buscarPorId(produtoCadastrado.getId());
+        Produto produtoEncontrado = service.buscarPorId(produtoCadastrado.getId());
 
         assertEquals(15, produtoEncontrado.getEstoque());
     }
