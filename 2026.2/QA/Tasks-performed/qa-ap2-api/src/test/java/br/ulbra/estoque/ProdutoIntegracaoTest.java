@@ -21,12 +21,12 @@ class ProdutoIntegracaoTest {
     @Test
     @DisplayName("Deve cadastrar e buscar um produto corretamente")
     void deveCadastrarEBuscarProduto() {
-        Produto produto = new Produto("Mouse", 50, 10);
+        Produto produto = new Produto("Produto", 50, 10);
 
         Produto cadastrado = service.cadastrar(produto);
         Produto encontrado = service.buscarPorId(cadastrado.getId());
 
-        assertEquals("Mouse", encontrado.getNome());
+        assertEquals("Produto", encontrado.getNome());
         assertEquals(50.0, encontrado.getPreco());
         assertEquals(10, encontrado.getEstoque());
     }
